@@ -9,15 +9,29 @@ import (
 	"github.com/klauspost/compress/zstd"
 )
 
+// CORS middleware for API endpoints
+func withCORS(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "https://pied-piper-terminal.vercel.app")
+		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+		next(w, r)
+	}
+}
+
 func main() {
 	// Serve static files (frontend)
 	fs := http.FileServer(http.Dir("../frontend"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 	http.HandleFunc("/", serveIndex)
 
-	// API endpoints
-	http.HandleFunc("/compress", handleCompress)
-	http.HandleFunc("/decompress", handleDecompress)
+	// API endpoints with CORS
+	http.HandleFunc("/compress", withCORS(handleCompress))
+	http.HandleFunc("/decompress", withCORS(handleDecompress))
 
 	fmt.Println("Pied Piper server running on http://localhost:8080 ...")
 	port := os.Getenv("PORT")
