@@ -5,6 +5,8 @@ const fileInput = document.getElementById('file-input');
 
 let selectedFile = null;
 
+const BACKEND_URL = 'https://your-backend.onrender.com';
+
 function print(text) {
   output.innerHTML += text + '\n';
   output.scrollTop = output.scrollHeight;
@@ -51,7 +53,7 @@ form.onsubmit = async (e) => {
     const formData = new FormData();
     formData.append('file', selectedFile);
     try {
-      const res = await fetch('/compress', { method: 'POST', body: formData });
+      const res = await fetch(`${BACKEND_URL}/compress`, { method: 'POST', body: formData });
       if (!res.ok) throw new Error('Compression failed');
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
@@ -74,7 +76,7 @@ form.onsubmit = async (e) => {
     const formData = new FormData();
     formData.append('file', selectedFile);
     try {
-      const res = await fetch('/decompress', { method: 'POST', body: formData });
+      const res = await fetch(`${BACKEND_URL}/decompress`, { method: 'POST', body: formData });
       if (!res.ok) throw new Error('Decompression failed');
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
