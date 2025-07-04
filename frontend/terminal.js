@@ -5,7 +5,7 @@ const fileInput = document.getElementById('file-input');
 
 let selectedFile = null;
 
-const BACKEND_URL = 'https://your-backend.onrender.com';
+const BACKEND_URL = 'https://pied-piper-vhci.onrender.com';
 
 function print(text) {
   output.innerHTML += text + '\n';
