@@ -20,7 +20,11 @@ func main() {
 	http.HandleFunc("/decompress", handleDecompress)
 
 	fmt.Println("Pied Piper server running on http://localhost:8080 ...")
-	http.ListenAndServe(":8080", nil)
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	http.ListenAndServe(":"+port, nil)
 }
 
 func serveIndex(w http.ResponseWriter, r *http.Request) {
