@@ -33,7 +33,13 @@ func main() {
 	http.HandleFunc("/compress", withCORS(handleCompress))
 	http.HandleFunc("/decompress", withCORS(handleDecompress))
 
-	fmt.Println("Pied Piper server running on http://localhost:8080 ...")
+	// Health check endpoint for UptimeRobot/Render
+	http.HandleFunc("/ping", withCORS(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("pong"))
+	}))
+
+	fmt.Println("Pied Piper server running...")
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
